@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
 import { IUserInputDTO } from "../interface/IUser";
-import userSchema from "./user-schema";
+
 import { generateToken, verifyToken } from "../utils/jwt";
+import userSchema from "./user-schema";
 
 const SALT_ROUNDS = 10;
 
@@ -27,6 +28,25 @@ const UserService = {
     // const token = jwt.sign({ userId: user._id }, JWT_SECRET);
 
     return { user, token };
+  },
+
+  getUserProfile: async (email: string) => {
+    const user = await userSchema.findOne({ email });
+    if (!user) throw new Error("해당 유저 없습니다");
+
+    return user;
+  },
+
+  getAllUsers: async (skip: number = 0, size: number = 5) => {
+    const users = await userSchema
+      .find({})
+      .sort({ email: 1 })
+      .skip(skip)
+      .limit(size)
+      .select("email name");
+
+    if (!users || users.length === 0) throw new Error("유저 목록이 없습니다.");
+    return users;
   },
 };
 
