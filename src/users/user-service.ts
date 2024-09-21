@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { IUserInputDTO } from "../interface/IUser";
 import userSchema from "./user-schema";
+// import { generateToken } from "utils/jwt";
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
@@ -23,6 +24,7 @@ const UserService = {
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) throw new Error("과연 그 비번 확실?");
 
+    // const token = generateToken(user._id.toString());
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
 
     return { user, token };

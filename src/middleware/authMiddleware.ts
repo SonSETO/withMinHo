@@ -1,8 +1,5 @@
 // import { Request, Response, NextFunction } from "express";
-// import jwt from "jsonwebtoken";
 // import { verifyToken } from "../utils/jwt";
-
-// const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 // export const authMiddleware = (
 //   req: Request,
@@ -19,7 +16,6 @@
 
 //   try {
 //     const decoded = verifyToken(token);
-
 //     req.user = decoded;
 //     next();
 //   } catch (error) {
