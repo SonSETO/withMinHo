@@ -1,11 +1,12 @@
 import { Router } from "express";
 import UserController from "./user-controller";
+import { userValidator } from "src/middleware/validators/user-validator";
 
 const userRouter = Router();
 
-userRouter.post("/signup", UserController.signUp);
+userRouter.post("/signup", userValidator.signUp, UserController.signUp);
 
-userRouter.post("/signin", UserController.signIn);
+userRouter.post("/signin", userValidator.signIn, UserController.signIn);
 
 /* req.params */
 // 특정 유저 조회
