@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
 import { IUserInputDTO } from "../interface/IUser";
 
-import { generateToken, verifyToken } from "../utils/jwt";
+import { generateRefreshToken, generateToken, verifyToken } from "../utils/jwt";
 import userSchema from "./user-schema";
 
 const SALT_ROUNDS = 10;
@@ -24,14 +24,24 @@ const UserService = {
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) throw new Error("과연 그 비번 확실?");
 
-    const token = generateToken(user._id.toString());
+    const accessToken = generateToken(user._id.toString());
+    const refreshToken = generateRefreshToken(user._id.toString());
     // const token = jwt.sign({ userId: user._id }, JWT_SECRET);
 
-    return { user, token };
+    return { user, accessToken, refreshToken };
   },
 
-  getUserProfile: async (email: string) => {
-    const user = await userSchema.findOne({ email });
+  /* req.query */
+  // getUserProfile: async (email: string) => {
+  //   const user = await userSchema.findOne({ email });
+  //   if (!user) throw new Error("해당 유저 없습니다");
+
+  //   return user;
+  // },
+
+  /* req.params.id */
+  getUserProfileById: async (id: string) => {
+    const user = await userSchema.findById(id);
     if (!user) throw new Error("해당 유저 없습니다");
 
     return user;

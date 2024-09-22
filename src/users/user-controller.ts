@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import UserService from "./user-service";
+import { generateToken, verifyToken } from "../utils/jwt";
 
 const UserController = {
   signUp: async (req: Request, res: Response, next: NextFunction) => {
@@ -15,19 +16,64 @@ const UserController = {
   signIn: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
-      const { user, token } = await UserService.signIn(email, password);
+      const { user, accessToken, refreshToken } = await UserService.signIn(
+        email,
+        password
+      );
 
-      res.status(200).send({ message: "로그인 성공", data: user, token });
+      res
+        .status(200)
+        .send({
+          message: "로그인 성공",
+          data: user,
+          accessToken,
+          refreshToken,
+        });
     } catch (e) {
       next(e);
     }
   },
+  refreshAccessToken: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        return res.status(401).json({ message: "리프레시 토큰이 필요합니다." });
+      }
+
+      const decoded = verifyToken(refreshToken);
+      const userId = (decoded as any).userId;
+
+      const newAccessToken = generateToken(userId);
+      res.status(200).send({ accessToken: newAccessToken });
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  /* req.query */
+  // getUserProfile: async (req: Request, res: Response, next: NextFunction) => {
+  //   try {
+  //     const email = req.query.email as string;
+  //     // req.params.id로 하는게 더 좋아보이는데
+
+  //     const getUser = await UserService.getUserProfile(email);
+  //     res.status(200).send({ message: "조회 성공", data: getUser });
+  //   } catch (e) {
+  //     next(e);
+  //   }
+  // },
+
+  /* req.params */
   getUserProfile: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const email = req.query.email as string;
-      // req.params.id로 하는게 더 좋아보이는데
+      const id = req.params.id;
 
-      const getUser = await UserService.getUserProfile(email);
+      const getUser = await UserService.getUserProfileById(id);
       res.status(200).send({ message: "조회 성공", data: getUser });
     } catch (e) {
       next(e);
