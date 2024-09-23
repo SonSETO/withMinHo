@@ -7,7 +7,7 @@ const userSchema = new Schema<IUser>({
   password: {
     type: String,
     default: null,
-  }, // 일반 로그인 시 사용 (OAuth 사용자는 null)
+  },
   avatar: { type: String, default: "N/A" },
   date: { type: Date, default: Date.now },
   oauthProvider: {
@@ -15,8 +15,8 @@ const userSchema = new Schema<IUser>({
     enum: ["kakao", "google", null],
     default: null,
   },
-  oauthId: { type: String, default: null }, // OAuth 로그인 시 사용
-  refreshToken: { type: String, default: null }, // 리프레시 토큰 저장
+  oauthId: { type: String, default: null },
+  refreshToken: { type: String, default: null },
 });
 
 export default mongoose.model<IUser>("User", userSchema);
