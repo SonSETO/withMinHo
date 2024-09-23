@@ -1,3 +1,6 @@
+여기 전체 마크다운 파일을 완성해드리겠습니다.
+
+```markdown
 # 미니 게시판 with MinHo
 
 ## 구현한 기능
@@ -15,6 +18,8 @@
 - JWT
 - TypeScript
 
+## 사용 방법
+
 ### 회원가입
 **POST /users/signup**
 
@@ -28,7 +33,7 @@ Request Body:
 ```
 
 ### 로그인
-**POST /users/signin
+**POST /users/signin**
 
 Request Body:
 ```json
@@ -37,3 +42,82 @@ Request Body:
   "password": "password123"
 }
 ```
+
+## API 명세서
+
+1. **회원가입**
+   - **URL**: `/users/signup`
+   - **Method**: `POST`
+   - **Request Body**:
+     ```json
+     {
+       "name": "홍길동",
+       "email": "gildong@example.com",
+       "password": "password123"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "message": "회원가입 성공",
+       "data": {
+         "name": "홍길동",
+         "email": "gildong@example.com"
+       }
+     }
+     ```
+
+2. **로그인**
+   - **URL**: `/users/signin`
+   - **Method**: `POST`
+   - **Request Body**:
+     ```json
+     {
+       "email": "gildong@example.com",
+       "password": "password123"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "message": "로그인 성공",
+       "accessToken": "eyJhbGciOiJIUzI1NiIsInR...",
+       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR...",
+       "data": {
+         "email": "gildong@example.com"
+       }
+     }
+     ```
+
+3. **유저 프로필 조회**
+   - **URL**: `/users/profile/:id`
+   - **Method**: `GET`
+   - **Response**:
+     ```json
+     {
+       "message": "조회 성공",
+       "data": {
+         "name": "홍길동",
+         "email": "gildong@example.com",
+         "avatar": "N/A"
+       }
+     }
+     ```
+
+4. **리프레시 토큰 발급**
+   - **URL**: `/users/refresh-token`
+   - **Method**: `POST`
+   - **Request Body**:
+     ```json
+     {
+       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR..."
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "accessToken": "eyJhbGciOiJIUzI1NiIsInR..."
+     }
+     ```
+```
+
