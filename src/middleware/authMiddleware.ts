@@ -15,10 +15,10 @@ export const authMiddleware = (
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(token) as { userId: string };
 
-    if (typeof decoded === "object" && decoded !== null) {
-      req.user = decoded;
+    if (typeof decoded === "object" && decoded.userId) {
+      req.decodedUser = decoded;
       next();
     } else {
       return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
