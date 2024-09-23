@@ -14,3 +14,26 @@
 - MongoDB (Mongoose)
 - JWT
 - TypeScript
+
+### 회원가입
+**POST /users/signup**
+
+Request Body:
+```json
+{
+  "name": "test",
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
+
+### 로그인
+**POST /users/signin
+
+Request Body:
+```json
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
