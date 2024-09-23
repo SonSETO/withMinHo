@@ -21,14 +21,22 @@ const UserController = {
         password
       );
 
-      res
-        .status(200)
-        .send({
-          message: "로그인 성공",
-          data: user,
-          accessToken,
-          refreshToken,
-        });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(200).send({
+        message: "로그인 성공",
+        data: {
+          email: user.email,
+          name: user.name,
+          avatar: user.avatar,
+        },
+        accessToken,
+      });
     } catch (e) {
       next(e);
     }
@@ -50,6 +58,27 @@ const UserController = {
 
       const newAccessToken = generateToken(userId);
       res.status(200).send({ accessToken: newAccessToken });
+    } catch (e) {
+      next(e);
+    }
+  },
+  logout: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        return res.status(400).send({ message: "로그아웃할 유저가 없습니다." });
+      }
+
+      await UserService.deleteRefreshToken(refreshToken);
+
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
+
+      res.status(200).send({ message: "로그아웃 성공" });
     } catch (e) {
       next(e);
     }

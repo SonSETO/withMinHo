@@ -28,7 +28,15 @@ const UserService = {
     const refreshToken = generateRefreshToken(user._id.toString());
     // const token = jwt.sign({ userId: user._id }, JWT_SECRET);
 
+    user.refreshToken = refreshToken;
+    await user.save();
     return { user, accessToken, refreshToken };
+  },
+  deleteRefreshToken: async (refreshToken: string) => {
+    await userSchema.updateOne(
+      { refreshToken },
+      { $set: { refreshToken: null } }
+    );
   },
 
   /* req.query */

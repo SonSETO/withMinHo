@@ -6,6 +6,7 @@ export interface IUser {
   date: Date;
   oauthProvider?: "kakao" | "google" | null;
   oauthId?: string | null;
+  refreshToken?: string | null;
 }
 
 export interface IUserInputDTO {
@@ -16,6 +17,7 @@ export interface IUserInputDTO {
   date?: Date;
   oauthProvider?: "kakao" | "google";
   oauthId?: string;
+  refreshToken?: string;
 }
 
 export interface userUniqueSearchInput {
