@@ -21,7 +21,20 @@ export const feedService = {
     });
     return newFeed;
   },
-  updateFeed: async () => {},
+  updateFeed: async (
+    authorId: mongoose.Types.ObjectId,
+    feedId: mongoose.Types.ObjectId,
+    feedData: IFeedInputDTO
+  ) => {
+    const feed = await feedSchema.findOne({ _id: feedId, author: authorId });
+    if (!feed) throw new Error("게시글을 찾을 수 없습니다.");
+
+    feed.title = feedData.title;
+    feed.content = feedData.content;
+    feed.images = feedData.images;
+
+    return feed.save();
+  },
   deleteFeed: async () => {},
   getUserFeed: async (
     userId: mongoose.Types.ObjectId,

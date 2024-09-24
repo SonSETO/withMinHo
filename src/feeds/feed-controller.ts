@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { feedService } from "./feed-service";
+import mongoose from "mongoose";
 
 export const feedController = {
   createFeed: async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +16,24 @@ export const feedController = {
       next(e);
     }
   },
-  updateFeed: async (req: Request, res: Response, next: NextFunction) => {},
+  updateFeed: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const feedData = req.body;
+      const authorId = req.decodedUser?.userId;
+      const feedId = new mongoose.Types.ObjectId(req.params.feedId);
+
+      const updatedFeed = await feedService.updateFeed(
+        authorId,
+        feedId,
+        feedData
+      );
+      res
+        .status(200)
+        .send({ message: "게시글이 수정되었습니다.", data: updatedFeed });
+    } catch (e) {
+      next(e);
+    }
+  },
   deleteFeed: async (req: Request, res: Response, next: NextFunction) => {},
   getUserFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -32,8 +50,6 @@ export const feedController = {
       //   //@ts-ignore
       //   order
       // );
-
-      res.status(200).send({ message: "조회 성공", data: feeds });
     } catch (e) {
       next(e);
     }

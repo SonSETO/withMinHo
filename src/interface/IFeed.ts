@@ -12,4 +12,5 @@ export interface IFeedInputDTO {
   title: string;
   content: string;
   images?: string[];
+  author: mongoose.Schema.Types.ObjectId;
 }
