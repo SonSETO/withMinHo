@@ -8,6 +8,11 @@ const userSchema = new Schema<IUser>({
     type: String,
     default: null,
   },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
   avatar: { type: String, default: "N/A" },
   date: { type: Date, default: Date.now },
   oauthProvider: {

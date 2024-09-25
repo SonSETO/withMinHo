@@ -7,6 +7,7 @@ export interface IUser {
   oauthProvider?: "kakao" | "google" | null;
   oauthId?: string | null;
   refreshToken?: string | null;
+  role: "user" | "admin";
 }
 
 export interface IUserInputDTO {
