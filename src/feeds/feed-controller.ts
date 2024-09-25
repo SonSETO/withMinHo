@@ -34,22 +34,28 @@ export const feedController = {
       next(e);
     }
   },
-  deleteFeed: async (req: Request, res: Response, next: NextFunction) => {},
+  deleteFeed: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authorId = req.decodedUser?.userId;
+      const feedId = new mongoose.Types.ObjectId(req.params.feedId);
+
+      const result = await feedService.deleteFeed(authorId, feedId);
+      res.status(200).send(result);
+    } catch (e) {
+      next(e);
+    }
+  },
   getUserFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // const userId = req.decodedUser?.userId;
-      // const page = parseInt(req.query.page as string) || 1;
-      // const size = parseInt(req.query.size as string) || 5;
-      // const sortBy = (req.query.sortBy as string) || "createdAt";
-      // const order = parseInt(req.query.order as string) || -1;
-      // const feeds = await feedService.getUserFeed(
-      //   userId,
-      //   page,
-      //   size,
-      //   sortBy,
-      //   //@ts-ignore
-      //   order
-      // );
+      const userId = new mongoose.Types.ObjectId(req.decodedUser?.userId);
+      const page = parseInt(req.query.page as string) || 1;
+      const size = parseInt(req.query.size as string) || 5;
+      const sortBy = (req.query.sortBy as string) || "createdAt";
+      const feeds = await feedService.getUserFeed(userId, page, size, sortBy);
+
+      res
+        .status(200)
+        .send({ message: "사용자의 게시글을 가져왔습니다.", data: feeds });
     } catch (e) {
       next(e);
     }
