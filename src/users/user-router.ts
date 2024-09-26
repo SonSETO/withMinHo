@@ -4,10 +4,13 @@ import { userValidator } from "../middleware/validators/user-validator";
 
 const userRouter = Router();
 
+//가입
 userRouter.post("/signup", userValidator.signUp, UserController.signUp);
 
+//로그인
 userRouter.post("/signin", userValidator.signIn, UserController.signIn);
 
+//로그아웃
 userRouter.post("/logout", UserController.logout);
 
 /* req.params */

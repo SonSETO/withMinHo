@@ -9,6 +9,10 @@ const SALT_ROUNDS = 10;
 
 const UserService = {
   signUp: async (data: IUserInputDTO) => {
+    const existingUser = await userSchema.findOne({ email: data.email });
+    if (existingUser) {
+      throw new Error("이미 존재하는 이메일입니다.");
+    }
     const hashedPassword = await bcrypt.hash(data.password!, SALT_ROUNDS);
     const user = new userSchema({
       ...data,

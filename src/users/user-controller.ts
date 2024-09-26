@@ -47,7 +47,8 @@ const UserController = {
     next: NextFunction
   ) => {
     try {
-      const { refreshToken } = req.body;
+      // const { refreshToken } = req.body;
+      const refreshToken = req.cookies.refreshToken;
 
       if (!refreshToken) {
         return res.status(401).json({ message: "리프레시 토큰이 필요합니다." });
