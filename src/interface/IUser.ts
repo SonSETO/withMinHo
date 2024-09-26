@@ -1,10 +1,12 @@
-export interface IUser {
+import mongoose, { Document } from "mongoose";
+
+export interface IUser extends Document<mongoose.Types.ObjectId> {
   name: string;
   email: string;
   password?: string;
   avatar: string;
   date: Date;
-  oauthProvider?: "kakao" | "google" | null;
+  oauthProvider?: "kakao" | "google";
   oauthId?: string | null;
   refreshToken?: string | null;
   role: "user" | "admin";

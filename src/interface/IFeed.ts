@@ -1,16 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
-export interface IFeed {
+export interface IFeed extends Document<mongoose.Types.ObjectId> {
   title: string;
   content: string;
-  author: mongoose.Schema.Types.ObjectId;
+  author: Types.ObjectId;
   createdAt: Date;
   images?: string[];
+  comments: Types.ObjectId[];
+  tags?: string[];
+  views: number;
+  likes: number;
 }
 
 export interface IFeedInputDTO {
   title: string;
   content: string;
   images?: string[];
-  author: mongoose.Schema.Types.ObjectId;
+  author: Types.ObjectId;
+  tags?: string[];
 }
