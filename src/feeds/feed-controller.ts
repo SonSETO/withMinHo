@@ -6,7 +6,8 @@ export const feedController = {
   createFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const feedData = req.body;
-      const authorId = req.decodedUser?.userId;
+      // const authorId = req.decodedUser?.userId;
+      const authorId = req.user?.userId;
       const newFeed = await feedService.createFeed(authorId, feedData);
 
       res
@@ -19,7 +20,8 @@ export const feedController = {
   updateFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const feedData = req.body;
-      const authorId = req.decodedUser?.userId;
+      // const authorId = req.decodedUser?.userId;
+      const authorId = req.user?.userId;
       const feedId = new mongoose.Types.ObjectId(req.params.feedId);
 
       const updatedFeed = await feedService.updateFeed(
@@ -36,7 +38,8 @@ export const feedController = {
   },
   deleteFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const authorId = req.decodedUser?.userId;
+      // const authorId = req.decodedUser?.userId;
+      const authorId = req.user?.userId;
       const feedId = new mongoose.Types.ObjectId(req.params.feedId);
 
       const result = await feedService.deleteFeed(authorId, feedId);
@@ -47,7 +50,7 @@ export const feedController = {
   },
   getUserFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.decodedUser?.userId);
+      const userId = new mongoose.Types.ObjectId(req.user?.userId);
       const page = parseInt(req.query.page as string) || 1;
       const size = parseInt(req.query.size as string) || 5;
       const sortBy = (req.query.sortBy as string) || "createdAt";
@@ -56,6 +59,29 @@ export const feedController = {
       res
         .status(200)
         .send({ message: "사용자의 게시글을 가져왔습니다.", data: feeds });
+    } catch (e) {
+      next(e);
+    }
+  },
+  likeFeed: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const feedId = new mongoose.Types.ObjectId(req.params.feedId);
+      const updatedFeed = await feedService.likeFeed(feedId);
+      res
+        .status(200)
+        .send({ message: "좋아요가 추가되었습니다.", data: updatedFeed });
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  unlikeFeed: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const feedId = new mongoose.Types.ObjectId(req.params.feedId);
+      const updatedFeed = await feedService.unlikeFeed(feedId);
+      res
+        .status(200)
+        .send({ message: "좋아요가 취소되었습니다.", data: updatedFeed });
     } catch (e) {
       next(e);
     }

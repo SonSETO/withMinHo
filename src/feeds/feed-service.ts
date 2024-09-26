@@ -86,12 +86,28 @@ export const feedService = {
           content: 1,
           images: 1,
           createdAt: 1,
+          views: 1,
           "authorInfo.name": 1,
           "authorInfo.avatar": 1,
         },
       },
     ]);
-
+    await feedSchema.updateMany({ author: userId }, { $inc: { views: 1 } });
     return feeds;
+  },
+  likeFeed: async (feedId: mongoose.Types.ObjectId) => {
+    const feed = await feedSchema.findById(feedId);
+    if (!feed) throw new Error("게시글을 찾을 수 없습니다.");
+
+    feed.likes += 1;
+    return feed.save();
+  },
+
+  unlikeFeed: async (feedId: mongoose.Types.ObjectId) => {
+    const feed = await feedSchema.findById(feedId);
+    if (!feed) throw new Error("게시글을 찾을 수 없습니다.");
+
+    feed.likes = Math.max(feed.likes - 1, 0);
+    return feed.save();
   },
 };
