@@ -18,7 +18,8 @@ export const authMiddleware = (
     const decoded = verifyToken(token) as { userId: string };
 
     if (typeof decoded === "object" && decoded.userId) {
-      req.decodedUser = decoded;
+      // req.decodedUser = decoded;
+      req.user = decoded;
       next();
     } else {
       return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
