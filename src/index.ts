@@ -5,6 +5,7 @@ import cors from "cors";
 import { errorHandler } from "./middleware/error-hanlder.middleware";
 import cookieParser from "cookie-parser";
 import feedRouter from "./feeds/feed-router";
+import commentRouter from "./comments/comments-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/users", userRouter);
 app.use("/feeds", feedRouter);
+app.use("/comment", commentRouter);
 
 app.use(errorHandler);
 
