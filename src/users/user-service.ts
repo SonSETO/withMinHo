@@ -36,7 +36,7 @@ const UserService = {
     await user.save();
     return { user, accessToken, refreshToken };
   },
-  deleteRefreshToken: async (refreshToken: string) => {
+  logout: async (refreshToken: string) => {
     await userSchema.updateOne(
       { refreshToken },
       { $set: { refreshToken: null } }

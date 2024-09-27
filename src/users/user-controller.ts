@@ -71,7 +71,7 @@ const UserController = {
         return res.status(400).send({ message: "로그아웃할 유저가 없습니다." });
       }
 
-      await UserService.deleteRefreshToken(refreshToken);
+      await UserService.logout(refreshToken);
 
       res.clearCookie("refreshToken", {
         httpOnly: true,
