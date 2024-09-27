@@ -50,7 +50,7 @@ export const feedController = {
   },
   getUserFeed: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.user?.userId);
+      const userId = req.user?.userId;
       const page = parseInt(req.query.page as string) || 1;
       const size = parseInt(req.query.size as string) || 5;
       const sortBy = (req.query.sortBy as string) || "createdAt";

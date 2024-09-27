@@ -5,7 +5,7 @@ import { CommentService } from "./comments-service";
 export const commentController = {
   createComment: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.user?.userId);
+      const userId = req.user?.userId;
       const feedId = new mongoose.Types.ObjectId(req.params.feedId);
       const commentData = req.body;
 
